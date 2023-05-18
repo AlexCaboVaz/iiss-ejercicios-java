@@ -1,0 +1,2 @@
+# Cambios
+En estos cambios, los atributos name y category de la clase Product se han convertido en Optional<String>. Además, se han actualizado los métodos relacionados para manejar Optional. En el método printShoppingCartContent() de la clase ShoppingCart, se utiliza Optional para obtener el nombre del producto y, en caso de que sea nulo, se muestra "Sin nombre" como valor predeterminado.
