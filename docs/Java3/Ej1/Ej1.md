@@ -3,26 +3,140 @@
 ## Primera parte
 
 ### 1º
-- En las modificaciones anteriores, se utilizan las operaciones de Streams de Java 8 para reemplazar los bucles for-each y los condicionales.
+- En las modificaciones, hemos utilizado las operaciones de Stream de Java 8 para simplificar el código:
 
-1. getEmployeeByName utiliza stream() para convertir la lista de empleados en un stream y luego aplica el filtro para encontrar el empleado por nombre. Luego, findFirst() devuelve un Optional<Employee> que puede contener el resultado encontrado o estar vacío si no se encontró ningún empleado con el nombre especificado.
-2. getEmployeeByNameAndAge sigue un enfoque similar al anterior, pero también compara la edad del empleado.
-3. getEmployeeByAgeOver utiliza filter para obtener los empleados cuya edad sea mayor que el límite especificado y luego utiliza collect para convertir los elementos filtrados en una lista.
-4. getEmployeeByAgeUnder sigue un enfoque similar, pero filtra los empleados cuya edad sea menor que el límite especificado.
+1. getEmployeeByName ahora devuelve un Optional<Employee>. Utilizamos stream() para convertir la lista de empleados en un flujo, luego usamos filter() para encontrar el empleado con el nombre dado y findFirst() para obtener el primer empleado que coincida.
+2. getEmployeeByNameAndAge también devuelve un Optional<Employee>. Aplicamos las mismas operaciones que en getEmployeeByName, pero además verificamos si la edad del empleado coincide con el parámetro age.
+3. getEmployeeByAgeOver ahora devuelve una lista de empleados utilizando toList(). Utilizamos stream() para convertir la lista de empleados en un flujo, luego aplicamos filter() para encontrar los empleados cuya edad sea mayor que el límite especificado.
+4. getEmployeeByAgeUnder también devuelve una lista de empleados utilizando toList(). Aplicamos las mismas operaciones que en getEmployeeByAgeOver, pero verificamos si la edad del empleado es menor que el límite especificado.
 
-- Estas modificaciones permiten aprovechar las características de la API de Streams de Java 8, como la concisión del código y la capacidad de realizar operaciones en paralelo si es necesario. 
+
+```
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class EmployeeDatabase {
+
+    private static List<Employee> employees = Arrays.asList(
+            new Employee("Employee1", 20),
+            new Employee("Employee2", 30),
+            new Employee("Employee3", 40),
+            new Employee("Employee4", 50));
+
+    public static Optional<Employee> getEmployeeByName(String name) {
+        return employees.stream()
+                .filter(e -> e.getName().equals(name))
+                .findFirst();
+    }
+
+    public static Optional<Employee> getEmployeeByNameAndAge(String name, int age) {
+        return employees.stream()
+                .filter(e -> e.getName().equals(name) && e.getAge() == age)
+                .findFirst();
+    }
+
+    public static List<Employee> getEmployeeByAgeOver(int limitAge) {
+        return employees.stream()
+                .filter(e -> e.getAge() > limitAge)
+                .toList();
+    }
+
+    public static List<Employee> getEmployeeByAgeUnder(int limitAge) {
+        return employees.stream()
+                .filter(e -> e.getAge() < limitAge)
+                .toList();
+    }
+}
+```
+
+- Recuerda importar java.util.Optional y java.util.stream para poder utilizar estas operaciones. 
 
 ### 2º
 
-- Las extensiones agregan las siguientes operaciones a la clase EmployeeDatabase:
+- Ahora puedes utilizar las siguientes operaciones adicionales:
 
-1. getEmployeesByAgeRange toma dos parámetros minAge y maxAge y devuelve una lista de empleados cuyas edades están dentro del rango especificado.
-2. getEmployeesOrderedByAgeAsc devuelve una lista de empleados ordenados de manera ascendente según su edad.
-3. getEmployeesOrderedByAgeDesc devuelve una lista de empleados ordenados de manera descendente según su edad.
-4. getNumberOfEmployees devuelve el número total de empleados en la base de datos.
-5. getNumberOfEmployeesWithName toma un parámetro name y devuelve el número de empleados en la base de datos cuyo nombre coincide con el valor proporcionado.
+1. getEmployeesByAgeRange(int minAge, int maxAge): Esta operación devuelve una lista de empleados cuyas edades están comprendidas entre el rango dado por minAge y maxAge. Utilizamos filter() para seleccionar los empleados que cumplen con el criterio y toList() para convertir el flujo de empleados en una lista.
 
-- Estas extensiones agregan funcionalidad adicional a la clase EmployeeDatabase para realizar operaciones más específicas sobre la base de datos de empleados.
+2. getEmployeesSortedByAgeAscending(): Esta operación devuelve una lista de empleados ordenados en orden ascendente según su edad. Utilizamos sorted() con Comparator.comparingInt() para ordenar los empleados por su edad y toList() para obtener la lista resultante.
+
+3. getEmployeesSortedByAgeDescending(): Esta operación devuelve una lista de empleados ordenados en orden descendente según su edad. Utilizamos sorted() con Comparator.comparingInt().reversed() para ordenar los empleados en orden descendente por su edad y toList() para obtener la lista resultante.
+
+5. getNumberOfEmployees(): Esta operación devuelve el número de empleados que existen en la base de datos utilizando el tamaño de la lista de empleados (employees.size()).
+
+6. getNumberOfEmployeesWithName(String name): Esta operación devuelve el número de empleados que existen en la base de datos y cuyo nombre es igual al proporcionado como parámetro. Utilizamos filter() para seleccionar los empleados con el nombre dado y luego contamos la cantidad resultante utilizando count().
+
+```
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+public class EmployeeDatabase {
+
+    private static List<Employee> employees = Arrays.asList(
+            new Employee("Employee1", 20),
+            new Employee("Employee2", 30),
+            new Employee("Employee3", 40),
+            new Employee("Employee4", 50));
+
+    public static Optional<Employee> getEmployeeByName(String name) {
+        return employees.stream()
+                .filter(e -> e.getName().equals(name))
+                .findFirst();
+    }
+
+    public static Optional<Employee> getEmployeeByNameAndAge(String name, int age) {
+        return employees.stream()
+                .filter(e -> e.getName().equals(name) && e.getAge() == age)
+                .findFirst();
+    }
+
+    public static List<Employee> getEmployeeByAgeOver(int limitAge) {
+        return employees.stream()
+                .filter(e -> e.getAge() > limitAge)
+                .toList();
+    }
+
+    public static List<Employee> getEmployeeByAgeUnder(int limitAge) {
+        return employees.stream()
+                .filter(e -> e.getAge() < limitAge)
+                .toList();
+    }
+
+    public static List<Employee> getEmployeesByAgeRange(int minAge, int maxAge) {
+        return employees.stream()
+                .filter(e -> e.getAge() >= minAge && e.getAge() <= maxAge)
+                .toList();
+    }
+
+    public static List<Employee> getEmployeesSortedByAgeAscending() {
+        return employees.stream()
+                .sorted(Comparator.comparingInt(Employee::getAge))
+                .toList();
+    }
+
+    public static List<Employee> getEmployeesSortedByAgeDescending() {
+        return employees.stream()
+                .sorted(Comparator.comparingInt(Employee::getAge).reversed())
+                .toList();
+    }
+
+    public static int getNumberOfEmployees() {
+        return employees.size();
+    }
+
+    public static int getNumberOfEmployeesWithName(String name) {
+        return (int) employees.stream()
+                .filter(e -> e.getName().equals(name))
+                .count();
+    }
+}
+```
+
+
 
 
 ## Segunda Parte
