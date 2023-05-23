@@ -1,10 +1,13 @@
 package Java1.Ejercicio2;
 
-import java.util.Arrays;
+class DataSorterAsc implements DataSorter {
+    private SortFunction sortFunction;
 
-public class DataSorterAsc implements DataSorter {
+    public DataSorterAsc(SortFunction sortFunction) {
+        this.sortFunction = sortFunction;
+    }
+
     public String[] sort(String[] data) {
-        Arrays.sort(data);
-        return data;
+        return sortFunction.sort(data);
     }
 }

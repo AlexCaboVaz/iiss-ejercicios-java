@@ -1,11 +1,13 @@
 package Java1.Ejercicio2;
 
-import java.util.Arrays;
-import java.util.Collections;
+class DataSorterDesc implements DataSorter {
+    private SortFunction sortFunction;
 
-public class DataSorterDesc implements DataSorter {
+    public DataSorterDesc(SortFunction sortFunction) {
+        this.sortFunction = sortFunction;
+    }
+
     public String[] sort(String[] data) {
-        Arrays.sort(data, Collections.reverseOrder());
-        return data;
+        return sortFunction.sort(data);
     }
 }

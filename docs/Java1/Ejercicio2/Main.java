@@ -9,31 +9,32 @@ public class Main {
                 "O", "A", "Q", "R", "J", "D", "G", "T", "U", "X", "B", "Y", "Z", "F"};
         System.out.println("data = " + Arrays.toString(data));
 
-        DataSorter dataSorter = (arr) -> {
-            List<String> list = Arrays.asList(arr);
-            Collections.shuffle(list);
-            return list.toArray(new String[0]);
+        SortFunction ascendingSort = dataArray -> {
+            Arrays.sort(dataArray);
+            return dataArray;
         };
-        dataSorter.sort(data);
-        System.out.println("data (random) = " + Arrays.toString(data));
 
-        DataSorter dataSorterAsc = (arr) -> {
-            Arrays.sort(arr);
-            return arr;
+        SortFunction descendingSort = dataArray -> {
+            Arrays.sort(dataArray, Collections.reverseOrder());
+            return dataArray;
         };
-        dataSorterAsc.sort(data);
+
+        SortFunction randomSort = dataArray -> {
+            List<String> dataList = Arrays.asList(dataArray);
+            Collections.shuffle(dataList);
+            return dataList.toArray(new String[0]);
+        };
+
+        DataSorter dataSorter = new DataSorterDesc(descendingSort);
+        dataSorter.sort(data);
+        System.out.println("data (desc) = " + Arrays.toString(data));
+
+        dataSorter = new DataSorterAsc(ascendingSort);
+        dataSorter.sort(data);
         System.out.println("data (asc) = " + Arrays.toString(data));
 
-        DataSorter dataSorterDesc = (arr) -> {
-            Arrays.sort(arr, Collections.reverseOrder());
-            return arr;
-        };
-        dataSorterDesc.sort(data);
-        System.out.println("data (desc) = " + Arrays.toString(data));
-    }
-
-    @FunctionalInterface
-    public interface DataSorter {
-        String[] sort(String[] data);
+        dataSorter = new DataSorterAsc(randomSort);
+        dataSorter.sort(data);
+        System.out.println("data (random) = " + Arrays.toString(data));
     }
 }

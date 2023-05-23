@@ -1,5 +1,8 @@
 package Java1.Ejercicio2;
 
-public interface DataSorter {
-    public String[] sort(String[] data);
+interface DataSorter {
+    String[] sort(String[] data);
+}
+interface SortFunction {
+    String[] sort(String[] data);
 }
